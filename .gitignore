@@ -1,6 +1,7 @@
 data/*
 models/*
 outputs/*
+src/onsets-and-frames/data/MAPS
 __pycache__
 .coverage
 .mypy_cache
