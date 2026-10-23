@@ -1,9 +1,9 @@
 import os
+import pprint
 from datetime import datetime
 
 import numpy as np
 from sacred import Experiment
-from sacred.commands import print_config
 from sacred.observers import FileStorageObserver
 from torch.nn.utils import clip_grad_norm_
 from torch.optim.lr_scheduler import StepLR
@@ -56,7 +56,7 @@ def train(logdir, device, iterations, resume_iteration, checkpoint_interval, tra
           maestro_metadata_filename, batch_size, sequence_length,
           model_complexity, learning_rate, learning_rate_decay_steps, learning_rate_decay_rate, leave_one_out,
           clip_gradient_norm, validation_length, validation_interval):
-    print_config(ex.current_run)
+    pprint.pprint(ex.current_run.config)
 
     os.makedirs(logdir, exist_ok=True)
     writer = SummaryWriter(logdir)

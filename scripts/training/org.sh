@@ -9,4 +9,7 @@ MAESTRO_METADATA_FILENAME=${MAESTRO_METADATA_FILENAME:-maestro-v3.0.0.json}
 
 exec taskset -c 0-39 python train.py with train_on=MAESTRO \
   "maestro_path=$MAESTRO_PATH" \
-  "maestro_metadata_filename=$MAESTRO_METADATA_FILENAME" "$@"
+  "maestro_metadata_filename=$MAESTRO_METADATA_FILENAME" "$@" \
+  batch_size=16 \
+  validation_interval=5000 \
+  checkpoint_interval=5000
