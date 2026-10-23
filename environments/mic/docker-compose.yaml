@@ -1,5 +1,6 @@
 services:
-  ascender:
+  onset-and-frames:
+    shm_size: 16g
     container_name: ${PROJECT_NAME_ENV}_${USER_NAME}
     hostname: ${USER_NAME}
     environment:
@@ -13,8 +14,8 @@ services:
               count: all
     build:
       args:
-        - BASE_IMAGE=nvidia/cuda:12.9.0-devel-ubuntu22.04
-        - PYTHON_VERSION=3.10
+        - BASE_IMAGE=nvidia/cuda:12.2.0-devel-ubuntu20.04
+        - PYTHON_VERSION=3.9
         - UID=${HOST_UID}
         - GID=${HOST_GID}
         - USER_NAME=${USER_NAME}
@@ -32,7 +33,9 @@ services:
       - /etc/passwd:/etc/passwd:ro
       - /home/hdd1:/home/hdd1
       - /home/ssd2:/home/ssd2
+    group_add:
+      - "789"      
     ports:
-      - 9876:9876
+      - 9875:9875
     ipc: host
     # network_mode: host

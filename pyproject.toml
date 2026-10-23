@@ -4,11 +4,25 @@ version = "0.3.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9"
-dependencies = []
+dependencies = [
+    "librosa>=0.6.2",
+    "mido>=1.2.9",
+    "mir-eval",
+    "numpy>=1.15.0",
+    "pillow>=6.2.0",
+    "sacred==0.7.4",
+    "scipy>=1.1.0",
+    "soundfile>=0.10.2",
+    "torch>=1.2.0",
+    "tqdm>=4.28.1",
+]
 
 [tool.uv]
 package = false
 python-preference = "only-system"
+
+[tool.uv.sources]
+mir-eval = { git = "https://github.com/craffel/mir_eval.git" }
 
 [tool.mypy]
 python_version = 3.12

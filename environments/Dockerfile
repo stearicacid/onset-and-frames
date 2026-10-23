@@ -32,7 +32,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python${PYTHON
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python${PYTHON_VERSION} 1
 
 # Install pip for specified Python version
-RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION}
+RUN curl -sS https://bootstrap.pypa.io/pip/3.9/get-pip.py | python${PYTHON_VERSION}
 
 # Install Poethepoet directly using pip to type "poe" command without "uv run".
 RUN python3 -m pip install --upgrade pip setuptools requests wheel six urllib3 \

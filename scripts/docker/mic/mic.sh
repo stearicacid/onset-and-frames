@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 cd environments/mic
-docker compose build ascender
-docker compose up ascender -d
-docker compose exec ascender bash
+docker compose build onset-and-frames
+docker compose up onset-and-frames -d
+docker compose exec onset-and-frames bash
