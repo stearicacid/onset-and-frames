@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 from abc import abstractmethod
 from glob import glob
 
@@ -95,10 +96,18 @@ class PianoRollAudioDataset(Dataset):
         if os.path.exists(saved_data_path):
             return torch.load(saved_data_path)
 
-        audio, sr = soundfile.read(audio_path, dtype='int16')
-        assert sr == SAMPLE_RATE
-
-        audio = torch.ShortTensor(audio)
+        info = soundfile.info(audio_path)
+        if info.samplerate == SAMPLE_RATE and info.channels == 1:
+            audio, _ = soundfile.read(audio_path, dtype='int16')
+            audio = torch.ShortTensor(audio)
+        else:
+            # MAESTRO v3 WAV files are 44.1 kHz stereo; decode at the model rate.
+            decoded = subprocess.run(
+                ['ffmpeg', '-v', 'error', '-i', audio_path, '-ac', '1',
+                 '-ar', str(SAMPLE_RATE), '-f', 's16le', '-acodec', 'pcm_s16le', '-'],
+                check=True, stdout=subprocess.PIPE,
+            ).stdout
+            audio = torch.from_numpy(np.frombuffer(decoded, dtype='<i2').copy())
         audio_length = len(audio)
 
         n_keys = MAX_MIDI - MIN_MIDI + 1
@@ -130,7 +139,9 @@ class PianoRollAudioDataset(Dataset):
 
 class MAESTRO(PianoRollAudioDataset):
 
-    def __init__(self, path='data/MAESTRO', groups=None, sequence_length=None, seed=42, device=DEFAULT_DEVICE):
+    def __init__(self, path='data/MAESTRO', groups=None, sequence_length=None, seed=42,
+                 device=DEFAULT_DEVICE, metadata_filename='maestro-v1.0.0.json'):
+        self.metadata_filename = metadata_filename
         super().__init__(path, groups if groups is not None else ['train'], sequence_length, seed, device)
 
     @classmethod
@@ -149,9 +160,16 @@ class MAESTRO(PianoRollAudioDataset):
             if len(files) == 0:
                 raise RuntimeError(f'Group {group} is empty')
         else:
-            metadata = json.load(open(os.path.join(self.path, 'maestro-v1.0.0.json')))
+            with open(os.path.join(self.path, self.metadata_filename)) as metadata_file:
+                metadata = json.load(metadata_file)
+            if isinstance(metadata, dict):
+                # MAESTRO v3 uses columns keyed by recording ID.
+                rows = ({column: values[index] for column, values in metadata.items()}
+                        for index in metadata['split'])
+            else:
+                rows = metadata
             files = sorted([(os.path.join(self.path, row['audio_filename'].replace('.wav', '.flac')),
-                             os.path.join(self.path, row['midi_filename'])) for row in metadata if row['split'] == group])
+                             os.path.join(self.path, row['midi_filename'])) for row in rows if row['split'] == group])
 
             files = [(audio if os.path.exists(audio) else audio.replace('.flac', '.wav'), midi) for audio, midi in files]
 

@@ -25,6 +25,8 @@ def config():
     resume_iteration = None
     checkpoint_interval = 1000
     train_on = 'MAESTRO'
+    maestro_path = 'data/MAESTRO'
+    maestro_metadata_filename = 'maestro-v1.0.0.json'
 
     batch_size = 8
     sequence_length = 327680
@@ -50,7 +52,8 @@ def config():
 
 
 @ex.automain
-def train(logdir, device, iterations, resume_iteration, checkpoint_interval, train_on, batch_size, sequence_length,
+def train(logdir, device, iterations, resume_iteration, checkpoint_interval, train_on, maestro_path,
+          maestro_metadata_filename, batch_size, sequence_length,
           model_complexity, learning_rate, learning_rate_decay_steps, learning_rate_decay_rate, leave_one_out,
           clip_gradient_norm, validation_length, validation_interval):
     print_config(ex.current_run)
@@ -66,8 +69,10 @@ def train(logdir, device, iterations, resume_iteration, checkpoint_interval, tra
         validation_groups = [str(leave_one_out)]
 
     if train_on == 'MAESTRO':
-        dataset = MAESTRO(groups=train_groups, sequence_length=sequence_length)
-        validation_dataset = MAESTRO(groups=validation_groups, sequence_length=sequence_length)
+        dataset = MAESTRO(path=maestro_path, metadata_filename=maestro_metadata_filename,
+                          groups=train_groups, sequence_length=sequence_length)
+        validation_dataset = MAESTRO(path=maestro_path, metadata_filename=maestro_metadata_filename,
+                                     groups=validation_groups, sequence_length=validation_length)
     else:
         dataset = MAPS(groups=['AkPnBcht', 'AkPnBsdf', 'AkPnCGdD', 'AkPnStgb', 'SptkBGAm', 'SptkBGCl', 'StbgTGd2'], sequence_length=sequence_length)
         validation_dataset = MAPS(groups=['ENSTDkAm', 'ENSTDkCl'], sequence_length=validation_length)
