@@ -53,7 +53,8 @@ def transcribe(model, audio):
 def transcribe_file(model_file, flac_paths, save_path, sequence_length,
                   onset_threshold, frame_threshold, device):
 
-    model = torch.load(model_file, map_location=device).eval()
+    # 学習時にモデル全体を保存しているため、信頼できるチェックポイントを従来の形式で読み込む。
+    model = torch.load(model_file, map_location=device, weights_only=False).eval()
     summary(model)
 
     for flac_path in flac_paths:

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Onsets and Frames · Research Viewer</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <div class="header-inner"><small>ONSETS &amp; FRAMES / RESEARCH VIEWER</small><h1>採譜結果の比較</h1></div>
+  </header>
+  <main>
+    <div class="setup-grid">
+      <section class="panel setup-panel">
+        <div class="section-title"><h2>Checkpoint</h2><button id="addModel" type="button">＋ モデルを追加</button></div>
+        <div id="modelRows" class="model-grid"></div>
+      </section>
+
+      <section class="panel setup-panel">
+        <h2>音源</h2>
+        <div class="source-tabs">
+          <label><input type="radio" name="sourceType" value="maestro" checked> MAESTRO v3 test</label>
+          <label><input type="radio" name="sourceType" value="upload"> WAVをアップロード</label>
+        </div>
+        <div id="maestroSource">
+          <input id="trackSearch" type="search" placeholder="作曲家・曲名・IDを検索">
+          <select id="trackSelect"></select>
+          <div id="trackInfo" class="muted"></div>
+        </div>
+        <div id="uploadSource" hidden>
+          <div class="upload-grid">
+            <label>WAV音源 <input id="uploadAudio" type="file" accept=".wav,audio/wav" required></label>
+            <label>正解MIDI（任意） <input id="uploadGt" type="file" accept=".mid,.midi,audio/midi"></label>
+          </div>
+          <button id="uploadButton" type="button">アップロード</button>
+          <span id="uploadInfo" class="muted"></span>
+        </div>
+        <div class="actions"><button id="compareButton" class="primary" type="button">推論・比較を開始</button><span id="jobStatus" aria-live="polite"></span></div>
+        <progress id="jobProgress" max="1" value="0" hidden></progress>
+      </section>
+    </div>
+
+    <section class="panel roll-panel">
+      <div class="section-title"><h2>ピアノロール</h2><span id="rollHint" class="muted">曲を選択すると表示します</span></div>
+      <audio id="audioPlayer" controls preload="metadata"></audio>
+      <div class="roll-controls">
+        <label>表示 <select id="viewMode"><option value="split">上下分割</option><option value="overlay">重ね合わせ</option></select></label>
+        <label>時間ズーム <input id="zoom" type="range" min="3" max="80" value="14"><output id="zoomValue">14 px/s</output></label>
+        <span class="muted">横スクロールで移動、ピアノロールをクリックして再生位置を変更</span>
+      </div>
+      <div id="legend" class="legend"></div>
+      <div id="rollScroll" class="roll-scroll"><div id="rollSpacer" class="roll-spacer"><canvas id="rollCanvas"></canvas></div></div>
+      <div id="downloads" class="downloads"></div>
+    </section>
+
+    <section class="panel metrics-panel">
+      <div class="section-title"><h2>評価指標</h2><span class="muted">各曲の値 / 全test曲の平均</span></div>
+      <div id="metrics" class="table-scroll"><p class="empty">推論結果を選択してください。</p></div>
+      <div id="aggregates" class="table-scroll"></div>
+    </section>
+  </main>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

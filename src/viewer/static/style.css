@@ -1,0 +1,105 @@
+:root {
+  color-scheme: light;
+  --background: #ffffff;
+  --subtle: #f6f8fa;
+  --border: #d0d7de;
+  --text: #24292f;
+  --muted: #57606a;
+  --accent: #0969da;
+  --accent-hover: #0550ae;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--background); color: var(--text); font: 14px/1.5 system-ui, -apple-system, sans-serif; }
+header { border-bottom: 1px solid var(--border); background: var(--background); }
+.header-inner { max-width: 1920px; margin: auto; padding: 17px 30px; }
+header small { color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .07em; }
+h1 { margin: 2px 0 0; font-size: 21px; line-height: 1.3; font-weight: 600; }
+h2 { margin: 0; font-size: 16px; line-height: 1.4; font-weight: 600; }
+h3 { margin: 0 0 8px; font-size: 14px; line-height: 1.4; font-weight: 600; }
+.muted, .empty { color: var(--muted); }
+main { width: 100%; max-width: 1920px; margin: auto; padding: 0 30px 56px; }
+.panel { padding: 20px 0 24px; border-bottom: 1px solid var(--border); }
+.section-title { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; margin-bottom: 13px; }
+
+/* 準備操作を横並びに収め、ピアノロールのための縦方向の領域を確保する。 */
+.setup-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, .85fr); border-bottom: 1px solid var(--border); }
+.setup-panel { min-width: 0; border-bottom: 0; }
+.setup-panel:first-child { padding-right: 22px; border-right: 1px solid var(--border); }
+.setup-panel:last-child { padding-left: 22px; }
+.setup-panel > h2 { margin-bottom: 13px; }
+
+button, select, input[type=search], input[type=file] { font: inherit; }
+button, select, input[type=search] { min-height: 32px; padding: 5px 9px; border: 1px solid var(--border); border-radius: 4px; background: var(--background); color: var(--text); }
+button { cursor: pointer; white-space: nowrap; }
+button:hover { background: var(--subtle); border-color: #afb8c1; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #ffffff; font-weight: 600; }
+button.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+button:disabled { opacity: .55; cursor: not-allowed; }
+:is(button, select, input, a, summary):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input[type=radio], input[type=checkbox], input[type=range] { accent-color: var(--accent); }
+
+.model-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); column-gap: 18px; }
+.model-card { min-width: 0; padding: 9px 0 5px; border-top: 1px solid var(--border); }
+.model-card select { width: 100%; }
+.model-card .card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
+.model-card .card-top button { min-height: 0; padding: 2px 6px; border: 0; color: var(--muted); font-size: 12px; }
+.model-card small { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; }
+.model-card details { margin-top: 6px; color: var(--muted); font-size: 12px; }
+.model-card summary { cursor: pointer; }
+.model-card pre { max-height: 220px; overflow: auto; margin: 6px 0 0; padding: 9px; border: 1px solid var(--border); background: var(--subtle); font: 12px/1.45 ui-monospace, monospace; }
+
+.source-tabs { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-bottom: 10px; }
+.source-tabs label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+input[type=search] { width: 100%; margin-bottom: 7px; }
+#trackSelect { width: 100%; }
+#trackInfo { margin-top: 5px; font-size: 12px; }
+.upload-grid { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-bottom: 9px; }
+.upload-grid label { display: grid; gap: 4px; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 9px 12px; margin-top: 14px; }
+#jobProgress { display: block; width: 100%; height: 5px; margin-top: 9px; accent-color: var(--accent); }
+#jobProgress[hidden] { display: none; }
+
+/* 音源と操作の直後に表示し、横幅は画面幅に応じて最大限使う。 */
+.roll-panel { padding-top: 22px; }
+.roll-panel audio { display: block; width: min(100%, 680px); height: 38px; margin: 0 0 12px; }
+.roll-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin-bottom: 9px; }
+.roll-controls label { display: inline-flex; align-items: center; gap: 8px; }
+.roll-controls .muted { font-size: 12px; }
+.legend, .downloads { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 17px; margin: 8px 0; }
+.legend { min-height: 24px; }
+.legend span, .legend label { display: inline-flex; align-items: center; gap: 6px; }
+.legend label { cursor: pointer; }
+.legend input { margin: 0 2px 0 0; }
+.legend i { display: inline-block; width: 11px; height: 11px; border: 1px solid #0002; border-radius: 2px; }
+.downloads a { color: var(--accent); text-decoration: none; }
+.downloads a:hover { text-decoration: underline; }
+.roll-scroll { position: relative; overflow: auto; min-height: 500px; max-height: min(82vh, 860px); border: 1px solid var(--border); background: #ffffff; }
+.roll-spacer { position: relative; min-width: 100%; }
+#rollCanvas { position: sticky; left: 0; display: block; }
+
+.table-scroll { max-width: 100%; overflow-x: auto; }
+.table-scroll + .table-scroll { margin-top: 16px; }
+.table-scroll > div { min-width: 0; }
+.table-scroll table { width: 100%; min-width: 900px; margin: 0; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.table-scroll th, .table-scroll td { padding: 7px 10px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+.table-scroll th { background: var(--subtle); color: var(--muted); font-size: 12px; font-weight: 600; }
+.table-scroll th:first-child, .table-scroll td:first-child { min-width: 220px; text-align: left; }
+.table-scroll td:nth-child(4), .table-scroll td:nth-child(7), .table-scroll td:nth-child(10) { font-weight: 600; }
+.table-scroll tbody tr:hover { background: var(--subtle); }
+
+@media (max-width: 900px) {
+  .setup-grid { grid-template-columns: minmax(0, 1fr); }
+  .setup-panel:first-child { padding-right: 0; border-right: 0; border-bottom: 1px solid var(--border); }
+  .setup-panel:last-child { padding-left: 0; }
+}
+
+@media (max-width: 600px) {
+  .header-inner { padding: 14px 16px; }
+  main { padding: 0 16px 40px; }
+  h1 { font-size: 19px; }
+  .panel { padding: 17px 0 21px; }
+  .model-grid { grid-template-columns: minmax(0, 1fr); }
+  .roll-scroll { min-height: 340px; max-height: 68vh; }
+  .roll-controls { align-items: flex-start; }
+}

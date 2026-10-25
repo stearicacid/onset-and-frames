@@ -85,7 +85,8 @@ def train(logdir, device, iterations, resume_iteration, checkpoint_interval, tra
         resume_iteration = 0
     else:
         model_path = os.path.join(logdir, f'model-{resume_iteration}.pt')
-        model = torch.load(model_path)
+        # 再開用のチェックポイントにはモデル全体が入っているため、従来の形式で読み込む。
+        model = torch.load(model_path, map_location=device, weights_only=False)
         optimizer = torch.optim.Adam(model.parameters(), learning_rate)
         optimizer.load_state_dict(torch.load(os.path.join(logdir, 'last-optimizer-state.pt')))
 
