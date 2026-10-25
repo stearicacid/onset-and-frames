@@ -91,9 +91,13 @@ def evaluate(data, model, onset_threshold=0.5, frame_threshold=0.5, save_path=No
 
 
 def evaluate_file(model_file, dataset, dataset_group, sequence_length, save_path,
-                  onset_threshold, frame_threshold, device):
+                  onset_threshold, frame_threshold, device,
+                  maestro_path='data/MAESTRO',
+                  maestro_metadata_filename='maestro-v1.0.0.json'):
     dataset_class = getattr(dataset_module, dataset)
     kwargs = {'sequence_length': sequence_length, 'device': device}
+    if dataset == 'MAESTRO':
+        kwargs.update(path=maestro_path, metadata_filename=maestro_metadata_filename)
     if dataset_group is not None:
         kwargs['groups'] = [dataset_group]
     dataset = dataset_class(**kwargs)
@@ -119,6 +123,8 @@ if __name__ == '__main__':
     parser.add_argument('--onset-threshold', default=0.5, type=float)
     parser.add_argument('--frame-threshold', default=0.5, type=float)
     parser.add_argument('--device', default='cuda' if torch.cuda.is_available() else 'cpu')
+    parser.add_argument('--maestro-path', default='data/MAESTRO')
+    parser.add_argument('--maestro-metadata-filename', default='maestro-v1.0.0.json')
 
     with torch.no_grad():
         evaluate_file(**vars(parser.parse_args()))
